@@ -116,6 +116,18 @@ class CommonFunction: NSObject {
         objUser.deleteUser()
         APPDELEGATE.handleAppViewControllerFlow()
     }
+    
+    //Get Current Tapped Index from Section Indexpath tableview
+    func returnPositionForThisIndexPath(indexPath:IndexPath, insideThisTable theTable:UITableView)->Int{
+        var i = 0
+        var rowCount = 0
+        while i < indexPath.section {
+            rowCount += theTable.numberOfRows(inSection: i)
+            i += 1
+        }
+        rowCount += indexPath.row
+        return rowCount
+    }
 }
 
 extension CommonFunction {

@@ -54,19 +54,19 @@ extension UIViewController {
     ///   - arrButtonName: contains all button that needs to be included
     ///   - strDestructiveButton:  contains title for the destructive buton
     ///   - completionBlock: handles alert controller button click event
-    func showActionSheetWithCompletion(pTitle : String? ,pStrMessage : String? , arrButtonName : [String] , destructiveButtonIndex : Int?, strCancelButton : String?,tintColor : UIColor?, shouldAnimate : Bool ,completionBlock: AlertCompletion?){
+    func showActionSheetWithCompletion(pTitle : String? ,pStrMessage : String? , arrButtonName : [String] , destructiveButtonIndex : Int?, strCancelButton : String?,tintColor : UIColor?, sender:UIButton? = nil,shouldAnimate : Bool ,completionBlock: AlertCompletion?){
         
         let alertController = UIAlertController(title: pTitle, message: pStrMessage, preferredStyle: .actionSheet)
         
         /*//to change font of title and message.
-        let titleFont = [NSAttributedStringKey.font: UIFont(name: "ArialHebrew-Bold", size: 18.0)!]
-        let messageFont = [NSAttributedStringKey.font: UIFont(name: "Avenir-Roman", size: 12.0)!]
-        
-        let titleAttrString = NSMutableAttributedString(string: pTitle!, attributes: titleFont)
-        let messageAttrString = NSMutableAttributedString(string: pStrMessage!, attributes: messageFont)
-        
-        alertController.setValue(titleAttrString, forKey: "attributedTitle")
-        alertController.setValue(messageAttrString, forKey: "attributedMessage")*/
+         let titleFont = [NSAttributedStringKey.font: UIFont(name: "ArialHebrew-Bold", size: 18.0)!]
+         let messageFont = [NSAttributedStringKey.font: UIFont(name: "Avenir-Roman", size: 12.0)!]
+         
+         let titleAttrString = NSMutableAttributedString(string: pTitle!, attributes: titleFont)
+         let messageAttrString = NSMutableAttributedString(string: pStrMessage!, attributes: messageFont)
+         
+         alertController.setValue(titleAttrString, forKey: "attributedTitle")
+         alertController.setValue(messageAttrString, forKey: "attributedMessage")*/
         
         for strButtonName in arrButtonName.enumerated(){
             var btnActionType = UIAlertAction.Style.default
@@ -94,7 +94,21 @@ extension UIViewController {
             alertController.view.tintColor = tintColor
         }
         
-        self.present(alertController, animated: shouldAnimate, completion: nil)
+        //if iPhone
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            //vc.present(actionSheet, animated: true, completion: nil)
+            self.present(alertController, animated: shouldAnimate, completion: nil)
+        }
+        else {
+            //In iPad Change Rect to position Popover
+            if let btn = sender{
+                alertController.popoverPresentationController?.sourceRect = btn.frame
+                alertController.popoverPresentationController?.sourceView = btn.superview
+            }
+            
+            //vc.present(actionSheet, animated: true, completion: nil)
+            self.present(alertController, animated: shouldAnimate, completion: nil)
+        }
     }
     
     
